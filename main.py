@@ -7,13 +7,12 @@ from dotenv import load_dotenv
 import uuid
 import os
 
-load_dotenv()
 def compress_video(input_path, output_path, bitrate='500k'):
     clip = VideoFileClip(input_path)
     clip.write_videofile(output_path, bitrate=bitrate)
 
 def store_file_to_bucket(file_path):
-    # Set the connection string to your Azure Blob Storage account
+    # Set the connection string to your Azure Blob Storage account and return file url
     
     load_dotenv()
     connection_string = str(os.getenv("CONNECTION_STRING"))
@@ -55,13 +54,25 @@ def store_file_to_bucket(file_path):
     # Construct the URL with the SAS token
     blob_url_with_sas = f"https://{account_name}.blob.core.windows.net/{container_name}/{blob_name}?{sas_token}"
 
-    print("Public link with SAS token:", blob_url_with_sas)    
+    #print("Public link with SAS token:", blob_url_with_sas)  
+    return blob_url_with_sas  
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
     # Example usage
-    #compress_video("input.mp4", "output_compressed.mp4", bitrate='10k')
-    store_file_to_bucket("output_compressed.mp4")
     return "<p>Hello, World!</p>"
+
+@app.route("/compress/video")
+def compress_video_router():
+    compress_video("input.mp4", "output_compressed.mp4", bitrate='10k')
+    file_path = store_file_to_bucket("output_compressed.mp4")
+    return file_path    
+
+@app.route("/compress/image")
+def compress_image_router():
+    # Example usage
+    compress_video("input.mp4", "output_compressed.mp4", bitrate='10k')
+    file_path = store_file_to_bucket("output_compressed.mp4")
+    return file_path        
