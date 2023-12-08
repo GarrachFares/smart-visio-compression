@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from azure.storage.blob import generate_blob_sas, BlobServiceClient, BlobSasPermissions
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
@@ -64,9 +64,8 @@ def store_file_to_bucket(file_path):
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    # Example usage
-    return "<p>Hello, World!</p>"
+def hello():
+    return render_template('/index.html')
 
 @app.route("/compress/video")
 def compress_video_router():
