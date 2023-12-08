@@ -49,7 +49,7 @@ ACCOUNT_KEY="your account key"
 
 where the connection string is your azure blob connection string and key is your account key
 
-
+![keys](https://github.com/GarrachFares/smart-visio-compression/assets/76496517/2dff6dec-7bdd-4273-b53d-72cca0e707a8)
 
 
 
