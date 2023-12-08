@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    color: #00695c;
+    padding: 20px;
+    background-image: url('static/images/OIG.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 700px;
+    margin: auto;
+    margin-bottom: 50px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"], select {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #00695c;
+}
+
+input[type="submit"] {
+    background-color: #00695c;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #004d40;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #b2dfdb;
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #4CAF50;
+  color: white;
+}
