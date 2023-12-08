@@ -1,76 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compression App</title>
-</head>
-<body>
-    <h1>Compression App</h1>
-
-    <form id="compressionForm" onsubmit="event.preventDefault(); compressFile()">
-        <label for="url">URL:</label>
-        <input type="text" id="url" name="url" required><br>
-
-        <label for="maxWeight">Max Weight (KB):</label>
-        <input type="number" id="maxWeight" name="maxWeight" required><br>
-
-        <label for="fileType">Select File Type:</label>
-        <select id="fileType" name="fileType" required>
-            <option value="image">Image</option>
-            <option value="video">Video</option>
-        </select><br>
-
-        <button type="submit">Compress</button>
-    </form>
-
+    <title>Flask App</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script>
-        function compressFile() {
-            var url = document.getElementById("url").value;
-            var maxWeight = document.getElementById("maxWeight").value;
-            var fileType = document.getElementById("fileType").value;
+        function submitForm(e) {
+            e.preventDefault();
+            var url = document.getElementById('url').value;
+            var max_size_kb = document.getElementById('maxsize').value;
+            var type = document.getElementById('type').value;
+            var actionUrl = 'http://127.0.0.1:5000/compress/' + type;
 
-            if (fileType === "image") {
-                callCompressImageAPI(url, maxWeight);
-            } else if (fileType === "video") {
-                compressVideo();
-            }
-        }
-
-        function callCompressImageAPI(url, maxWeight) {
-            // Call the API for image compression
-            fetch('http://127.0.0.1:5000/compress/image', {
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    url: url,
-                    max_size_kb: maxWeight,
-                }),
+                body: JSON.stringify({ url: url, max_size_kb: max_size_kb }),
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Compressed Image:', data);
-                // Handle the response as needed (e.g., display results to the user)
+                const resultTable = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+                resultTable.innerHTML = ''; // Clear the table
+                for (const key in data) {
+                    const newRow = resultTable.insertRow();
+                    const keyCell = newRow.insertCell(0);
+                    const valueCell = newRow.insertCell(1);
+                    keyCell.textContent = key;
+                    valueCell.textContent = data[key];
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+            // Trigger the animation
+            playAnimation();
         }
+        function playAnimation() {
+            // Show the result container
+            const resultContainer = document.getElementById('result');
+            resultContainer.classList.remove('hidden');
 
-        function compressVideo() {
-            // Call the API for video compression
-            fetch('http://127.0.0.1:5000/compress/video')
-            .then(response => response.text())
-            .then(data => {
-                console.log('Compressed Video:', data);
-                // Handle the response as needed (e.g., display results to the user)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            // Add plants and trees to the result container
+            const plantsAndTrees = `
+                <div class="plant">🌱</div>
+                <div class="tree">🌳</div>
+            `;
+            resultContainer.innerHTML = plantsAndTrees;
+
+            // Create a GSAP timeline
+            const tl = gsap.timeline();
+
+            // Animate trees flying in with GSAP
+            tl.from(".plant", { y: -1000, duration: 1, ease: "bounce.out" })
+              .from(".tree", { y: -1000, duration: 1, ease: "bounce.out", delay: 0.5 });
+
+            // Play sound (add your sound file)
+            setTimeout(function(){
+                const audio = new Audio('static/sounds/rain.wav');
+                audio.play();
+            }, 2000);
         }
     </script>
+</head>
+<body>
+    <form onsubmit="submitForm(event)">
+        <label for="url">URL:</label><br>
+        <input type="text" id="url" name="url"><br>
+        <label for="maxsize">Max Size:</label><br>
+        <input type="text" id="maxsize" name="maxsize"><br>
+        <label for="type">Type:</label><br>
+        <select id="type" name="type">
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+        </select><br>
+        <input type="submit" value="Submit">
+    </form>
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </body>
 </html>
