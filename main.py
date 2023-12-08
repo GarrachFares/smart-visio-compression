@@ -48,6 +48,7 @@ def compress_video_router():
 def compress_image_router():
     url = request.json['url']
     max_size_kb = request.json['max_size_kb']
+    max_size_kb = int(max_size_kb)
     parsed_url = urlparse(url)
     image_name_with_extension = os.path.basename(parsed_url.path)
     output_image_path, _ = os.path.splitext(image_name_with_extension)
