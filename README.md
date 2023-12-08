@@ -2,6 +2,8 @@
 
 This is a Python Flask application that allows users to compress both images and videos. It provides a simple web api for users to upload their media files, which are then processed and compressed.
 
+# Note : please check the "final" branch
+
 ## Features
 
 - Image compression: Upload and compress image files.
