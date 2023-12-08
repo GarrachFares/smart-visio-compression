@@ -41,6 +41,14 @@ pip install -r dependencies.txt
 then 
 
 python app.py
+```
+then create a .env file containing :
+
+CONNECTION_STRING="your connection string"
+ACCOUNT_KEY="your account key"
+
+where the connection string is your azure blob connection string and key is your account key
+
 
 
 
