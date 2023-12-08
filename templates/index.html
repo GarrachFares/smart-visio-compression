@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compression App</title>
+</head>
+<body>
+    <h1>Compression App</h1>
+
+    <form id="compressionForm" onsubmit="event.preventDefault(); compressFile()">
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required><br>
+
+        <label for="maxWeight">Max Weight (KB):</label>
+        <input type="number" id="maxWeight" name="maxWeight" required><br>
+
+        <label for="fileType">Select File Type:</label>
+        <select id="fileType" name="fileType" required>
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+        </select><br>
+
+        <button type="submit">Compress</button>
+    </form>
+
+    <script>
+        function compressFile() {
+            var url = document.getElementById("url").value;
+            var maxWeight = document.getElementById("maxWeight").value;
+            var fileType = document.getElementById("fileType").value;
+
+            if (fileType === "image") {
+                callCompressImageAPI(url, maxWeight);
+            } else if (fileType === "video") {
+                compressVideo();
+            }
+        }
+
+        function callCompressImageAPI(url, maxWeight) {
+            // Call the API for image compression
+            fetch('http://127.0.0.1:5000/compress/image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    url: url,
+                    max_size_kb: maxWeight,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Compressed Image:', data);
+                // Handle the response as needed (e.g., display results to the user)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function compressVideo() {
+            // Call the API for video compression
+            fetch('http://127.0.0.1:5000/compress/video')
+            .then(response => response.text())
+            .then(data => {
+                console.log('Compressed Video:', data);
+                // Handle the response as needed (e.g., display results to the user)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
